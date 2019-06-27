@@ -41,10 +41,12 @@ func Start(quit chan os.Signal, reload chan string, logger *logrus.Logger, v1 *v
 		}
 	})
 
+	logger.Info(conf.Server.List)
+
 	// Enable root list of routes
 	if conf.Server.List {
+		logger.Warning("Listing enabled on root")
 		root.Get("/", func(w http.ResponseWriter, r *http.Request) {
-			logger.Warning("Listing enabled on root")
 			routes := make(map[string][]string)
 			walkFunc := func(method string, route string, handler http.Handler, middlewares ...func(http.Handler) http.Handler) error {
 				routes[route] = append(routes[route], method)
